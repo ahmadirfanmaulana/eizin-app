@@ -15,7 +15,8 @@
 
 	<link rel="stylesheet" type="text/css" href="<?php echo ASSET; ?>dist/login/util.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo ASSET; ?>dist/login/main.css">
-  <style media="screen">
+	<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+	<style media="screen">
     *{
       font-family: "Poppins";
     }
