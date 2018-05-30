@@ -175,83 +175,98 @@ else {
           <th class="text-center">Tanggal Entri</th>
           <th class="text-center">Aksi</th>
         </tr>
-        <?php
-        $no = 1;
-        foreach ($data['data_eizin'] as $data) {
-          $count_at = $x->db()->query("select * from tb_attachment_type where at_type = 'IB' or at_type = 'semua'")->num_rows;
-          $count_attachment = $x->db()->query("select * from tb_attachment where attachment_eizin_id = ".$data->eizin_id."")->num_rows;
-          ?>
-          <tr>
-            <td class="text-center">
-              <?php echo $no; ?>
-            </td>
-            <td class="text-center">
-              <div class="progress progress-sm active" style="margin-bottom:0px">
-            <?php
-            if ($data->eizin_status == "terkirim") {
-              ?>
-              <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
-                <span class="sr-only">50% Complete</span>
-              </div>
-              <?php
-            }
-            elseif ($data->eizin_status == "verifikasi 1") {
-              ?>
-              <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%">
-                <span class="sr-only">75% Complete</span>
-              </div>
-              <?php
-            }
-            elseif ($data->eizin_status == "verifikasi 2") {
-              ?>
-              <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                <span class="sr-only">100% Complete</span>
-              </div>
-              <?php
-            }
-            else {
-              if ($count_at == $count_attachment) {
-                ?>
-                <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%">
-                  <span class="sr-only">25% Complete</span>
-                </div>
-                <?php
-              }
-              else {
-                  ?>
-                  <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
-                    <span class="sr-only">10% Complete</span>
-                  </div>
-                  <?php
-              }
-            }
-            ?>
-            </div>
-            </td>
-            <td>
-              <?php $x->pict('dinas/'.$data->dinas_photo,array('string'=>$data->dinas_nama)); ?>
-            </td>
-            <td class="text-center">
-              <?php echo $data->biodata_nip; ?>
-            </td>
-            <td>
-              <?php echo $data->biodata_nama; ?>
-            </td>
-            <td class="text-center">
-              <?php echo $x->format_tanggal($data->eizin_date_kirim); ?>
-            </td>
-            <td class="text-center">
-              <a href="<?php echo ADMIN; ?>ib/<?php echo $data->dinas_id; ?>/<?php echo $data->eizin_id; ?>/verifikasi-1">
-                <button type="button" name="button" class="btn btn-default" title="Lihat" data-toggle="tooltip">
-                  <i class="fa fa-share"></i>
-                </button>
-              </a>
-            </td>
-          </tr>
+        <tbody>
           <?php
-          $no++;
-        }
-         ?>
+          $no = 1;
+          if ($data['data_eizin']->num_rows() == 0) {
+            ?>
+            <tr>
+              <td colspan="7" class="text-center">Data Kosong</td>
+            </tr>
+            <?php
+          }
+          else { 
+            foreach ($data['data_eizin']->result() as $data) {
+              $this->db->where('at_type','IB');
+              $this->db->or_where('at_type','semua');
+              $count_at = $this->db->get("tb_attachment_type")->num_rows();
+              $count_attachment = $this->db->get_where("tb_attachment",[
+                "attachment_eizin_id" => $data->eizin_id
+                ])->num_rows();
+                ?>
+                <tr>
+                  <td class="text-center">
+                    <?php echo $no; ?>
+                  </td>
+                  <td class="text-center">
+                    <div class="progress progress-sm active" style="margin-bottom:0px">
+                      <?php
+                      if ($data->eizin_status == "terkirim") {
+                        ?>
+                        <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+                          <span class="sr-only">50% Complete</span>
+                        </div>
+                        <?php
+                      }
+                      elseif ($data->eizin_status == "verifikasi 1") {
+                        ?>
+                        <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%">
+                          <span class="sr-only">75% Complete</span>
+                        </div>
+                        <?php
+                      }
+                      elseif ($data->eizin_status == "verifikasi 2") {
+                        ?>
+                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                          <span class="sr-only">100% Complete</span>
+                        </div>
+                        <?php
+                      }
+                      else {
+                        if ($count_at == $count_attachment) {
+                          ?>
+                          <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%">
+                            <span class="sr-only">25% Complete</span>
+                          </div>
+                          <?php
+                        }
+                        else {
+                          ?>
+                          <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
+                            <span class="sr-only">10% Complete</span>
+                          </div>
+                          <?php
+                        }
+                      }
+                      ?>
+                    </div>
+                  </td>
+                  <td>
+                    <?php $x->pict('dinas/'.$data->dinas_photo,array('string'=>$data->dinas_nama)); ?>
+                  </td>
+                  <td class="text-center">
+                    <?php echo $data->biodata_nip; ?>
+                  </td>
+                  <td>
+                    <?php echo $data->biodata_nama; ?>
+                  </td>
+                  <td class="text-center">
+                    <?php echo $x->format_tanggal($data->eizin_date_kirim); ?>
+                  </td>
+                  <td class="text-center">
+                    <a href="<?php echo ADMIN; ?>ib/<?php echo $data->dinas_id; ?>/<?php echo $data->eizin_id; ?>/verifikasi-1">
+                      <button type="button" name="button" class="btn btn-default" title="Lihat" data-toggle="tooltip">
+                        <i class="fa fa-share"></i>
+                      </button>
+                    </a>
+                  </td>
+                </tr>
+                <?php
+                $no++;
+              }
+          }
+           ?>
+        </tbody>
       </table>
     </div>
     <div class="box-footer">

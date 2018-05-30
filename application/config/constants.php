@@ -86,6 +86,6 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 // custom constant by irfanmaulana.com
-define('URL','http://localhost/eizin/');
-define('ADMIN','http://localhost/eizin/administrator/');
-define('ASSET','http://localhost/eizin/assets/');
+define('URL','http://localhost/eizin-app/');
+define('ADMIN','http://localhost/eizin-app/administrator/');
+define('ASSET','http://localhost/eizin-app/assets/');

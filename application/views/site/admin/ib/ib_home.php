@@ -44,7 +44,6 @@ $x = new TopLibrary();
     <table class="table table-striped dataTable">
       <thead>
         <tr>
-          <th class="text-center"><input type="checkbox" name="" value=""></th>
           <th class="text-center">No</th>
           <th class="text-center">Dinas</th>
           <th class="text-center">Jumlah</th>
@@ -57,7 +56,6 @@ $x = new TopLibrary();
         foreach ($data_dinas as $data) {
           ?>
           <tr>
-            <td class="text-center"></td>
             <td class="text-center">
               <?php echo $no; ?>
             </td>
@@ -71,7 +69,11 @@ $x = new TopLibrary();
                 ?>
                 <span class="label label-info" style="margin-right:5px;">
                   <?php
-                  echo $x->db()->query("select * from tb_eizin where eizin_dinas_id = $data[dinas_id] and eizin_status = 'terkirim' and eizin_type = 'IB'")->num_rows;
+                  echo $this->db->get_where("tb_eizin",[
+                    "eizin_dinas_id" => $data['dinas_id'],
+                    "eizin_status"   => 'terkirim',
+                    "eizin_type"     => 'IB'
+                    ])->num_rows();
                   ?>
                   <i class="fa fa-envelope-o"></i>
                 </span>
@@ -80,7 +82,11 @@ $x = new TopLibrary();
                 ?>
                 <span class="label label-primary" style="margin-right:5px;">
                   <?php
-                  echo $x->db()->query("select * from tb_eizin where eizin_dinas_id = $data[dinas_id] and eizin_status = 'verifikasi 1' and eizin_type = 'IB'")->num_rows;
+                  echo $this->db->get_where("tb_eizin",[
+                    "eizin_dinas_id" => $data['dinas_id'],
+                    "eizin_status"   => 'verifikasi 1',
+                    "eizin_type"     => 'IB'
+                    ])->num_rows();
                   ?>
                   <i class="fa fa-hourglass-start"></i>
                 </span>
@@ -89,7 +95,11 @@ $x = new TopLibrary();
                 ?>
                 <span class="label label-success">
                   <?php
-                  echo $x->db()->query("select * from tb_eizin where eizin_dinas_id = $data[dinas_id] and eizin_status = 'verifikasi 2' and eizin_type = 'IB'")->num_rows;
+                  echo $this->db->get_where("tb_eizin",[
+                    "eizin_dinas_id" => $data['dinas_id'],
+                    "eizin_status"   => 'verifikasi 2',
+                    "eizin_type"     => 'IB'
+                    ])->num_rows();
                   ?>
                   <i class="fa fa-check-square-o"></i>
                 </span>
@@ -99,7 +109,11 @@ $x = new TopLibrary();
                 ?>
                 <span class="text-<?php if($data_sort == "terkirim"){echo "info";}elseif($data_sort == "verifikasi 1"){echo "primary";}else{echo "success";} ?>">
                   <?php
-                  echo $x->db()->query("select * from tb_eizin where eizin_dinas_id = $data[dinas_id] and eizin_status = '$data_sort' and eizin_type = 'IB'")->num_rows;
+                  echo $this->db->get_where("tb_eizin",[
+                    "eizin_dinas_id" => $data['dinas_id'],
+                    "eizin_status"   => $data_sort,
+                    "eizin_type"     => 'IB'
+                    ])->num_rows();
                   ?>
                   <i class="fa fa-male"></i>
                 </span>
@@ -114,8 +128,15 @@ $x = new TopLibrary();
                 </button>
               </a>
               <?php
-                $jumlah_semua_data = $x->db()->query("select * from tb_eizin where eizin_dinas_id = $data[dinas_id] and eizin_type = 'IB'")->num_rows;
-                $jumlah_data_selesai = $x->db()->query("select * from tb_eizin where eizin_dinas_id = $data[dinas_id] and eizin_status = 'verifikasi 2' and eizin_type = 'IB'")->num_rows;
+              $jumlah_semua_data = $this->db->get_where("tb_eizin",[
+                "eizin_dinas_id" => $data['dinas_id'],
+                "eizin_type"     => 'IB'
+                ])->num_rows();
+              $jumlah_data_selesai = $this->db->get_where("tb_eizin",[
+                "eizin_dinas_id" => $data['dinas_id'],
+                "eizin_status"   => 'verifikasi 2',
+                "eizin_type"     => 'IB'
+                ])->num_rows();
                 if ($jumlah_semua_data == $jumlah_data_selesai) {
                   ?>
                   <button type="button" name="button" class="btn btn-danger delete" data-dinas="<?php echo $data['dinas_id']; ?>">
@@ -132,7 +153,7 @@ $x = new TopLibrary();
          ?>
       </tbody>
     </table>
-    <?php $x->endbox('body'); ?> 
+    <?php $x->endbox('body'); ?>
   <?php $x->endbox(); ?>
  <?php $x->endcolumn(); ?>
  <!-- col 3 -->

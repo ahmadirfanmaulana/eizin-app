@@ -36,8 +36,10 @@ $x->endcolumn();
           <?php
           $no = 1;
           foreach ($data_eizin as $data) {
-            $count_at = $x->db()->query("select * from tb_attachment_type where at_type = 'IB' or at_type = 'semua'")->num_rows;
-            $count_attachment = $x->db()->query("select * from tb_attachment where attachment_eizin_id = ".$data->eizin_id."")->num_rows;
+            $this->db->where("at_type",'SKLK');
+            $this->db->or_where("at_type",'semua');
+            $count_at = $this->db->get("tb_attachment_type")->num_rows();
+            $count_attachment = $this->db->get_where("tb_attachment",["attachment_eizin_id" => $data->eizin_id])->num_rows();
             ?>
             <tr>
               <td class="text-center">
@@ -150,7 +152,7 @@ $x->endcolumn();
           }
            ?>
         </tbody>
-      </table> 
+      </table>
       <!-- /.box-footer -->
 
       <?php

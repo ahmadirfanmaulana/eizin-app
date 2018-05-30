@@ -49,7 +49,7 @@ class ModelDinas extends CI_Model
       if ($insert_dinas && $insert_user) {
         if (!empty($this->input->post('dinas_email'))) {
           // kirim notifikasi email ke admin
-          if ($this->TopMode->email_active == "on") {
+          if ($this->TopModel->email_active == "on") {
             $from = $this->TopModel->email_admin();
             $to = $this->input->post('dinas_email');
             $subject = "e-Izin membuat akun anda";

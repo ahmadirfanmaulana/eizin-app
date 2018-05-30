@@ -1,7 +1,7 @@
 <?php
 $x = new TopLibrary();
-$sql_at = mysqli_query($x->db(),"select * from tb_attachment_type where at_id = $at_id");
-$data_at = mysqli_fetch_array($sql_at);
+$sql_at = $this->db->get_where('tb_attachment_type',["at_id" => $at_id]);
+$data_at = $sql_at->row();
 
 $x->content();
 $x->column(4);
@@ -103,7 +103,7 @@ $x->endcolumn();
 
   $x->column(8);
     $x->box('type','success');
-      $x->box('title','Input : '.$data_at['at_nama']);
+      $x->box('title','Input : '.$data_at->at_nama);
       ?>
       <form class="" action="" method="post" enctype="multipart/form-data">
         <!-- box body -->

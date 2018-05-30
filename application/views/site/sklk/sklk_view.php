@@ -118,8 +118,12 @@ $x->endcolumn();
         <div class="mailbox-read-info">
                 <h5>Status :
                   <?php
-                  $count_at = $x->db()->query("select * from tb_attachment_type where at_type = 'SKLK' or at_type = 'semua'")->num_rows;
-                  $count_attachment = $x->db()->query("select * from tb_attachment where attachment_eizin_id = '$eizin_id'")->num_rows;
+                  $this->db->where('at_type' , 'SKLK');
+                  $this->db->or_where('at_type' , 'semua');
+                  $count_at = $this->db->get("tb_attachment_type")->num_rows();
+                  $count_attachment = $this->db->get_where("tb_attachment",[
+                    "attachment_eizin_id" => $eizin_id
+                    ])->num_rows();
                   if ($data->eizin_status == "terkirim") {
                     ?>
                     <label for="" class="label label-info">Terkirim</label>
@@ -206,20 +210,25 @@ $x->endcolumn();
             <?php $x->box('footer'); ?>
               <ul class="mailbox-attachments clearfix">
                 <?php
-                $sql = mysqli_query($x->db(),"select * from tb_attachment_type where at_type = 'SKLK' or at_type = 'Semua'");
+                $this->db->where('at_type' , 'IB');
+                $this->db->or_where('at_type' , 'semua');
+                $sql = $this->db->get('tb_attachment_type');
                 $no=1;
-                while ($at = mysqli_fetch_array($sql)) {
-                  $sql_attachment = mysqli_query($x->db(),"select * from tb_attachment where attachment_at_id = $at[at_id] and attachment_eizin_id = ".$data->biodata_eizin_id."");
-                  $row_attachment = mysqli_num_rows($sql_attachment);
-                  $data_attachment = mysqli_fetch_array($sql_attachment);
+                foreach ($sql->result_array() as $at) {
+                  $sql_attachment = $this->db->get_where('tb_attachment',[
+                    "attachment_at_id" => $at['at_id'],
+                    "attachment_eizin_id" => $data->biodata_eizin_id
+                  ]);
+                  $row_attachment = $sql_attachment->num_rows();
+                  $data_attachment = $sql_attachment->row();
                   if ($row_attachment>0) {
                     ?>
                     <li style="width:31.5%" title="<?php echo $at['at_nama']; ?>" data-toggle="tooltip">
                       <span class="mailbox-attachment-icon has-img">
                         <ul class="docs-pictures">
                           <li style="width:100%">
-                              <div style="width:100%;height:230px;background-image:url('<?php echo URL; ?>upload/attachment/dinas<?php echo $_SESSION['dinas_id']; ?>/sklk<?php echo $data->biodata_eizin_id; ?>/<?php echo $data_attachment['attachment_file_name']; ?>');background-size:cover;background-position:center;cursor:pointer;"  >
-                                <img data-original="<?php echo URL; ?>upload/attachment/dinas<?php echo $_SESSION['dinas_id']; ?>/sklk<?php echo $data->biodata_eizin_id; ?>/<?php echo $data_attachment['attachment_file_name']; ?>" class="img-thumbnail img-circle" src="" style="width:100%;height:100%;opacity:0">
+                              <div style="width:100%;height:230px;background-image:url('<?php echo URL; ?>upload/attachment/dinas<?php echo $_SESSION['dinas_id']; ?>/sklk<?php echo $data->biodata_eizin_id; ?>/<?php echo $data_attachment->attachment_file_name; ?>');background-size:cover;background-position:center;cursor:pointer;"  >
+                                <img data-original="<?php echo URL; ?>upload/attachment/dinas<?php echo $_SESSION['dinas_id']; ?>/sklk<?php echo $data->biodata_eizin_id; ?>/<?php echo $data_attachment->attachment_file_name; ?>" class="img-thumbnail img-circle" src="" style="width:100%;height:100%;opacity:0">
                               </div>
                             </li>
                          </ul>
@@ -236,8 +245,8 @@ $x->endcolumn();
                            ?>
                         </a>
                         <span class="mailbox-attachment-size">
-                          <?php echo $data_attachment['attachment_file_size']; ?> KB
-                          <a href="<?php echo URL; ?>upload/attachment/dinas<?php echo $_SESSION['dinas_id']; ?>/sklk<?php echo $eizin_id; ?>/<?php echo $data_attachment['attachment_file_name']; ?>" class="btn btn-default btn-xs pull-right" target="_blank" title="Download" data-toggle="tooltip">
+                          <?php echo $data_attachment->attachment_file_size; ?> KB
+                          <a href="<?php echo URL; ?>upload/attachment/dinas<?php echo $_SESSION['dinas_id']; ?>/sklk<?php echo $eizin_id; ?>/<?php echo $data_attachment->attachment_file_name; ?>" class="btn btn-default btn-xs pull-right" target="_blank" title="Download" data-toggle="tooltip">
                             <i class="fa fa-cloud-download"></i>
                           </a>
                           <a href="<?php echo URL; ?>sklk/<?php echo $data->biodata_eizin_id; ?>/edit/<?php echo $at['at_id']; ?>" class="btn btn-default btn-xs pull-right" title="Edit Lampiran" data-toggle="tooltip">

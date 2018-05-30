@@ -50,7 +50,7 @@ $x->content();
           <?php
           $no = 1;
           foreach ($data_dinas as $data) {
-            $row_eizin = $x->db()->query("select * from tb_eizin where eizin_dinas_id = ".$data->dinas_id."")->num_rows;
+            $row_eizin = $this->db->get_where("tb_eizin",["eizin_dinas_id" => $data->dinas_id])->num_rows();
             if ($tag == "belum mengirimkan") {
               if ($row_eizin == 0) {
                 ?>

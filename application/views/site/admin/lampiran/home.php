@@ -55,14 +55,16 @@ $x->content();
           $no = 1;
           foreach ($data_lampiran as $data) {
             ?>
-            <tr> 
+            <tr>
               <td class="text-center"><?php echo $no; ?></td>
               <td><?php echo $data->at_nama; ?></td>
               <td class="text-center"><?php if($data->at_deskripsi==""){echo "-";}else{echo $data->at_deskripsi;} ?></td>
               <td class="text-center"><?php echo $data->at_type; ?></td>
               <td class="text-center">
                 <?php
-                $row_attachment = $x->db()->query("select * from tb_attachment where attachment_at_id = ".$data->at_id."")->num_rows;
+                $row_attachment = $this->db->get_where("tb_attachment",[
+                  "attachment_at_id" => $data->at_id
+                  ])->num_rows();
                 if ($row_attachment >0) {
                   ?>
                   <button type="button" name="button" class="btn btn-danger" title="Lampiran dapat dihapus jika semua lampiran yang diinputkan dinas dihapus" disabled>

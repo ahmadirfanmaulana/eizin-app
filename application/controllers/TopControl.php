@@ -22,7 +22,7 @@ class TopControl extends CI_Controller
        redirect(URL."404_notfound");
      }
      $data['data_login'] = $this->TopModel->login();
-
+     // echo $this->TopModel->encription_password('admin2');
      $this->load->view('site/login',$data);
    }
 

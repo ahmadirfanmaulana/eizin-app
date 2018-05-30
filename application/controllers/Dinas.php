@@ -35,7 +35,7 @@ class Dinas extends CI_Controller
     $this->db->where('user_level','dinas');
     $this->db->order_by('dinas_entri','desc');
     $data['data_dinas'] = $this->db->get()->result();
-    $data['tag'] = str_replace('-',' ',$value);
+    $data['tag']        = str_replace('-',' ',$value);
     // breadcrumb
     $breadcrumb['data'] = array('home','dinas');
     $breadcrumb['link'] = array('');
@@ -132,7 +132,6 @@ class Dinas extends CI_Controller
     </table>
     <script type="text/javascript">
       if (!window.print()) {
-        window.location = '<?php echo ADMIN; ?>dinas';
       }
     </script>
     <?php

@@ -23,11 +23,13 @@ class TopModel extends CI_Model
   }
   public function admin1_id()
   {
-    return 1;
+    $data = $this->db->get_where('tb_users',['user_level'=>'admin1'])->row();
+    return $data->user_id;
   }
   public function admin2_id()
   {
-    return 19;
+    $data = $this->db->get_where('tb_users',['user_level'=>'admin2'])->row();
+    return $data->user_id;
   }
   public function email_admin()
   {
@@ -163,7 +165,7 @@ class TopModel extends CI_Model
       $this->db->join('tb_biodata','tb_biodata.biodata_eizin_id = tb_eizin.eizin_id');
       $this->db->where('eizin_status','verifikasi 1');
       $this->db->order_by('eizin_entri','desc');
-      $eizin_data = $this->db->get('tb_eizin',10,0)->result();
+      $eizin_data = $this->db->get('tb_eizin',10,0);
     }
     else {
       $this->db->select('*');
@@ -172,7 +174,7 @@ class TopModel extends CI_Model
       $this->db->where('eizin_status','verifikasi 2');
       $this->db->or_where('eizin_status','terkirim');
       $this->db->order_by('eizin_entri','desc');
-      $eizin_data = $this->db->get('tb_eizin',10,0)->result();
+      $eizin_data = $this->db->get('tb_eizin',10,0);
     }
 
     return array(
