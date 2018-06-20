@@ -210,7 +210,7 @@ $x->endcolumn();
             <?php $x->box('footer'); ?>
               <ul class="mailbox-attachments clearfix">
                 <?php
-                $this->db->where('at_type' , 'IB');
+                $this->db->where('at_type' , 'SKLK');
                 $this->db->or_where('at_type' , 'semua');
                 $sql = $this->db->get('tb_attachment_type');
                 $no=1;

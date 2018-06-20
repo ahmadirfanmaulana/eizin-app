@@ -185,7 +185,7 @@ else {
             </tr>
             <?php
           }
-          else { 
+          else {
             foreach ($data['data_eizin']->result() as $data) {
               $this->db->where('at_type','IB');
               $this->db->or_where('at_type','semua');
@@ -254,7 +254,7 @@ else {
                     <?php echo $x->format_tanggal($data->eizin_date_kirim); ?>
                   </td>
                   <td class="text-center">
-                    <a href="<?php echo ADMIN; ?>ib/<?php echo $data->dinas_id; ?>/<?php echo $data->eizin_id; ?>/verifikasi-1">
+                    <a href="<?php echo ADMIN . strtolower($data->eizin_type); ?>/<?php echo $data->dinas_id; ?>/<?php echo $data->eizin_id; ?>/verifikasi-1">
                       <button type="button" name="button" class="btn btn-default" title="Lihat" data-toggle="tooltip">
                         <i class="fa fa-share"></i>
                       </button>
